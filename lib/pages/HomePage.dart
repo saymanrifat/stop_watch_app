@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -8,17 +10,33 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   late Stopwatch stopwatch;
+  late Timer t;
 
-  void handleStartStop() {}
+  void handleStartStop() {
+    if (stopwatch.isRunning) {
+      stopwatch.stop();
+    } else {
+      stopwatch.start();
+    }
+  }
 
   String returnFormattedText() {
-    return "";
+    String milli = (stopwatch.elapsed.inMilliseconds % 1000).toString();
+
+    var second = stopwatch.elapsed.inSeconds;
+    var minute = stopwatch.elapsed.inMinutes;
+    var hours = stopwatch.elapsed.inHours;
+    return "$hours:$minute:$second:$milli";
   }
 
   @override
   void initState() {
     super.initState();
     stopwatch = Stopwatch();
+
+    t = Timer.periodic(const Duration(milliseconds: 30), (timer) {
+      setState(() {});
+    });
   }
 
   @override
@@ -30,8 +48,10 @@ class _HomePageState extends State<HomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             CupertinoButton(
-              padding: EdgeInsets.all(0),
-              onPressed: () {},
+              padding: const EdgeInsets.all(0),
+              onPressed: () {
+                handleStartStop();
+              },
               child: Container(
                 height: 250,
                 alignment: Alignment.center,
@@ -39,7 +59,7 @@ class _HomePageState extends State<HomePage> {
                     shape: BoxShape.circle,
                     border: Border.all(color: Colors.blue, width: 4)),
                 child: Text(
-                  "00:00:000",
+                  returnFormattedText(),
                   style: TextStyle(
                       fontSize: 40,
                       fontWeight: FontWeight.bold,
@@ -56,7 +76,11 @@ class _HomePageState extends State<HomePage> {
                 style:
                     TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
               ),
-              onPressed: () {},
+              onPressed: () {
+                setState(() {
+                  stopwatch.reset();
+                });
+              },
               padding: EdgeInsets.all(0),
             )
           ],
