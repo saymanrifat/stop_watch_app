@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -21,10 +22,12 @@ class _HomePageState extends State<HomePage> {
   }
 
   String returnFormattedText() {
-    String milli = (stopwatch.elapsed.inMilliseconds % 1000).toString();
+    String milli =
+        (stopwatch.elapsed.inMilliseconds % 1000).toString().padLeft(3, '0');
 
-    var second = stopwatch.elapsed.inSeconds;
-    var minute = stopwatch.elapsed.inMinutes;
+    String second =
+        (stopwatch.elapsed.inSeconds % 60).toString().padLeft(2, '0');
+    var minute = (stopwatch.elapsed.inMinutes % 60).toString().padLeft(2, '0');
     var hours = stopwatch.elapsed.inHours;
     return "$hours:$minute:$second:$milli";
   }
@@ -60,10 +63,11 @@ class _HomePageState extends State<HomePage> {
                     border: Border.all(color: Colors.blue, width: 4)),
                 child: Text(
                   returnFormattedText(),
-                  style: TextStyle(
-                      fontSize: 40,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black),
+                  style: GoogleFonts.bebasNeue(
+                    fontSize: 45,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
                 ),
               ),
             ),
@@ -77,9 +81,7 @@ class _HomePageState extends State<HomePage> {
                     TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
               ),
               onPressed: () {
-                setState(() {
-                  stopwatch.reset();
-                });
+                stopwatch.reset();
               },
               padding: EdgeInsets.all(0),
             )
